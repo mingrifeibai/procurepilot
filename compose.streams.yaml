@@ -1,0 +1,14 @@
+services:
+  redis:
+    container_name: procurepilot-redis
+    image: redis:7.4-alpine
+    ports: ["127.0.0.1:56379:6379"]
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["stream-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+volumes:
+  stream-data:

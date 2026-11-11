@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "procurepilot"
+version = "1.0.0rc2"
+description = "Evidence-aware procurement and supplier collaboration"
+requires-python = ">=3.10"
+dependencies = ["fastapi", "uvicorn", "sqlalchemy>=2", "pydantic>=2", "langgraph", "mcp", "ortools", "psycopg[binary]", "alembic", "httpx", "pypdf", "openpyxl", "redis>=6.4,<7", "opentelemetry-api==1.45.2"]
+
+[project.optional-dependencies]
+test = ["pytest", "httpx"]
+search = ["fastembed==0.9.1", "pillow>=10.3,<14"]
+ocr = ["rapidocr-onnxruntime==1.4.4", "pypdfium2==5.14.0"]
+observability = ["opentelemetry-sdk==1.45.2", "opentelemetry-exporter-otlp-proto-http==1.45.2"]
+storage = ["botocore==1.43.125"]
+
+[tool.setuptools.packages.find]
+include = ["procurepilot*"]
+
+[tool.setuptools.package-data]
+procurepilot = ["alembic/*.py", "alembic/versions/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E9", "F"]

@@ -1,0 +1,6 @@
+# 在 Kubernetes 1.30+、至少两台可调度节点上使用。
+# 请预先创建 RWX PVC，并在运行时 Secret 中配置独立 PostgreSQL 和共享服务。
+apiReplicas: 2
+workerReplicas: 2
+multiNode: true
+existingClaim: procurepilot-shared

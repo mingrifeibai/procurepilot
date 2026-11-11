@@ -1,0 +1,422 @@
+:root {
+  font-family: Inter, "Microsoft YaHei", sans-serif;
+  color: #18392f;
+  background: #f3f6f3;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  border: 0;
+  background: #1b624a;
+  color: white;
+  padding: 12px 19px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button:hover {
+  filter: brightness(1.08);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+button.secondary {
+  background: #eaf0e9;
+  color: #244b3e;
+  border: 1px solid #d7e2d8;
+}
+input,
+select {
+  padding: 11px;
+  border: 1px solid #d5e0d8;
+  border-radius: 7px;
+  background: white;
+  color: #18392f;
+  max-width: 100%;
+}
+input:focus,
+select:focus {
+  outline: 2px solid #78a88d;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: #53685e;
+  flex: 1;
+  min-width: 110px;
+}
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+aside {
+  width: 242px;
+  flex-shrink: 0;
+  background: #123c30;
+  color: #e6f1e9;
+  padding: 32px 23px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.brand {
+  font-size: 23px;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+.brand b {
+  color: #b9dc8e;
+}
+aside small {
+  font-size: 11px;
+  color: #adc7b8;
+}
+.nav {
+  margin-top: 55px;
+  display: grid;
+  gap: 12px;
+}
+.nav button {
+  background: none;
+  text-align: left;
+  color: #b5c9bd;
+  padding: 15px 10px;
+  font-size: 14px;
+}
+.nav button.active {
+  background: #2e5647;
+  color: white;
+}
+.nav span {
+  margin-right: 16px;
+  color: #8bb098;
+  font-size: 11px;
+}
+.aside-bottom {
+  position: absolute;
+  bottom: 30px;
+  font-size: 12px;
+  color: #b5c9bd;
+}
+.aside-bottom p {
+  line-height: 1.9;
+  font-size: 11px;
+}
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b9dc8e;
+  margin-right: 6px;
+}
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 42px 40px;
+}
+header {
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dde5dc;
+  color: #64786b;
+  font-size: 12px;
+}
+header select {
+  background: transparent;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 37px 0 25px;
+}
+.eyebrow {
+  letter-spacing: 2px;
+  color: #6c856e;
+  font-size: 10px;
+  font-weight: bold;
+}
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin: 12px 0;
+}
+h2 {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 8px 0 18px;
+}
+p {
+  color: #6a7c6e;
+  font-size: 13px;
+  line-height: 1.8;
+}
+small {
+  font-size: 12px;
+  color: #7a8b7e;
+}
+h2 small {
+  font-weight: 400;
+}
+.workspace-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.stats article {
+  padding: 22px;
+}
+.stats strong {
+  display: block;
+  font-size: 28px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+article {
+  background: white;
+  padding: 26px;
+  border: 1px solid #e0e7dc;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #eef1eb;
+  padding-bottom: 10px;
+}
+.step em {
+  font-style: normal;
+  border-radius: 50%;
+  background: #edf3e7;
+  color: #577045;
+  padding: 3px 10px;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+.row label {
+  max-width: 230px;
+}
+form > label,
+form > .row {
+  margin-bottom: 20px;
+}
+.check {
+  flex-direction: row;
+  align-items: center;
+}
+.check input {
+  width: auto;
+}
+.list {
+  padding: 20px 0;
+  border-bottom: 1px solid #e5ebe2;
+}
+.list p {
+  margin: 8px 0;
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-block;
+  padding: 7px 10px;
+  border-radius: 5px;
+  background: #edf2e5;
+  color: #5e733f;
+  font-size: 12px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: left;
+  font-size: 13px;
+}
+th {
+  font-weight: 500;
+  color: #839080;
+  background: #f5f7f2;
+}
+th,
+td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #e7ece3;
+}
+td small {
+  display: block;
+  margin-top: 7px;
+}
+td code {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.table-wrap {
+  overflow: auto;
+}
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff;
+  border: 1px dashed #b9cbb8;
+  border-radius: 12px;
+  color: #6b7d6e;
+}
+.error,
+.notice {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.error {
+  background: #f9e9e5;
+  color: #953c2c;
+}
+.notice {
+  background: #e5efdf;
+  color: #386136;
+}
+.audit {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eef1e8;
+  font-size: 12px;
+}
+.audit span {
+  color: #8b988b;
+}
+.audit small {
+  margin-left: auto;
+}
+@media (max-width: 1000px) {
+  aside {
+    width: 190px;
+    padding: 25px 15px;
+  }
+  main {
+    padding: 0 20px 25px;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .heading {
+    align-items: start;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 650px) {
+  .layout {
+    display: block;
+  }
+  aside {
+    position: static;
+    height: auto;
+    width: 100%;
+    padding: 20px;
+  }
+  .nav {
+    display: flex;
+    overflow: auto;
+    margin-top: 20px;
+    gap: 5px;
+  }
+  .nav span,
+  .aside-bottom,
+  aside > small {
+    display: none;
+  }
+  .nav button {
+    padding: 10px;
+  }
+  .heading {
+    display: block;
+  }
+  .heading > button {
+    margin-top: 12px;
+  }
+  .workspace-bar input {
+    width: 100%;
+  }
+  header {
+    height: auto;
+    min-height: 65px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 0;
+  }
+  header form {
+    flex: 1 1 100%;
+    flex-wrap: nowrap;
+    min-width: 0;
+    margin: 0;
+  }
+  header form input {
+    flex: 1;
+    min-width: 0;
+  }
+  table {
+    min-width: 550px;
+  }
+  article {
+    overflow: auto;
+    padding: 20px;
+  }
+}
+
+textarea {
+  font: inherit;
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border: 1px solid #d5e0d8;
+  border-radius: 7px;
+  color: #18392f;
+  resize: vertical;
+}

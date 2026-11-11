@@ -1,0 +1,18 @@
+# 本机演示检索服务，仅绑定环回地址；生产部署应使用认证与TLS。
+services:
+  opensearch:
+    image: opensearchproject/opensearch:2.19.0
+    ports: ["127.0.0.1:59200:9200"]
+    environment:
+      discovery.type: single-node
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    volumes: ["search-data:/usr/share/opensearch/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+volumes:
+  search-data:

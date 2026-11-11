@@ -1,0 +1,25 @@
+{
+  "description": "固定合成附件词法检索回归，不代表语义检索泛化性能",
+  "artifacts": [
+    {"id": "dock", "filename": "扩展坞参数.txt", "text": "USB-C 扩展坞：含税报价450元。支持双屏显示。质保三年。预计七天交付。"},
+    {"id": "computer", "filename": "研发电脑.txt", "text": "研发电脑配置32GB内存，支持USB-C及HDMI。含税报价5800元，供货库存100台。"},
+    {"id": "monitor", "filename": "显示器.txt", "text": "显示器27英寸，HDMI接口，单价1800元。交期十天，保修一年。"},
+    {"id": "delivery", "filename": "交付协议.txt", "text": "交付协议：分批到货必须提供批次清单；验收异常可复检，复检需要审批人与签字记录。"},
+    {"id": "design", "filename": "设计设备.txt", "text": "设计岗位电脑配置64GB内存。报价9600元，型号design-64。参数均为模拟，不构成真实供应商承诺。"},
+    {"id": "invoice", "filename": "发票说明.txt", "text": "发票说明：供应商支持增值税专用发票，开票时需确认单位抬头和税号。"}
+  ],
+  "queries": [
+    {"id": "q01", "query": "扩展坞 USB-C 质保", "relevant": ["dock"]},
+    {"id": "q02", "query": "研发电脑 32GB", "relevant": ["computer"]},
+    {"id": "q03", "query": "HDMI 显示器 27", "relevant": ["monitor"]},
+    {"id": "q04", "query": "复检 审批人", "relevant": ["delivery"]},
+    {"id": "q05", "query": "64GB 设计", "relevant": ["design"]},
+    {"id": "q06", "query": "发票 税号", "relevant": ["invoice"]},
+    {"id": "q07", "query": "分批到货", "relevant": ["delivery"]},
+    {"id": "q08", "query": "DESIGN-64", "relevant": ["design"]},
+    {"id": "q09", "query": "usb-c", "relevant": ["dock", "computer"]},
+    {"id": "q10", "query": "nonexistent-model-xyz", "relevant": []},
+    {"id": "q11", "query": "七天交付", "relevant": ["dock"]},
+    {"id": "q12", "query": "含税报价5800元", "relevant": ["computer"]}
+  ]
+}

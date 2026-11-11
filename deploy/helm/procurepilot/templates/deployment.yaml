@@ -1,0 +1,116 @@
+{{- $root := . -}}
+{{- if not (has $root.Values.objectStorage (list "sharedVolume" "s3")) }}
+{{- fail "objectStorage must be sharedVolume or s3" }}
+{{- end }}
+{{- range $component := list "api" "worker" }}
+{{- $replicas := index $root.Values (printf "%sReplicas" $component) }}
+{{- if and $root.Values.multiNode (or (lt (int $replicas) 2) (not (semverCompare ">=1.30.0-0" $root.Capabilities.KubeVersion.Version))) }}
+{{- fail "multiNode requires Kubernetes 1.30+ and at least two replicas of each component" }}
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "%s-%s" $root.Release.Name $component | quote }}
+spec:
+  replicas: {{ $replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: procurepilot
+      app.kubernetes.io/instance: {{ $root.Release.Name | quote }}
+      app.kubernetes.io/component: {{ $component | quote }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: procurepilot
+        app.kubernetes.io/instance: {{ $root.Release.Name | quote }}
+        app.kubernetes.io/component: {{ $component | quote }}
+    spec:
+      {{- if $root.Values.multiNode }}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          minDomains: 2
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: procurepilot
+              app.kubernetes.io/instance: {{ $root.Release.Name | quote }}
+              app.kubernetes.io/component: {{ $component | quote }}
+      {{- end }}
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 220
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: {{ $component }}
+          image: {{ printf "%s:%s" $root.Values.image.repository $root.Values.image.tag | quote }}
+          imagePullPolicy: {{ $root.Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          {{- if eq $component "worker" }}
+          command: ["python", "-m", "procurepilot.worker"]
+          {{- else }}
+          ports:
+            - {name: http, containerPort: 8091}
+          startupProbe:
+            httpGet: {path: /api/health, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: {path: /api/health, port: http}
+            periodSeconds: 5
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ required "existingSecret must reference a runtime Secret" $root.Values.existingSecret | quote }}
+          env:
+            - {name: DEMO_MODE, value: "0"}
+            - {name: MODEL_WORKER_MODE, value: "external"}
+            {{- if or $root.Values.multiNode (eq $root.Values.objectStorage "s3") }}
+            - {name: REQUIRE_POSTGRES, value: "1"}
+            {{- end }}
+            {{- if eq $root.Values.objectStorage "s3" }}
+            - {name: OBJECT_BACKEND, value: "s3"}
+            {{- end }}
+            - {name: OBJECT_ROOT, value: /data/objects}
+            - {name: EMBEDDING_CACHE_DIR, value: /data/embedding-cache}
+            {{- range $key, $value := $root.Values.environment }}
+            {{- if not (has $key (list "KNOWLEDGE_BACKEND" "SEARCH_BACKEND" "NEO4J_HTTP_URL" "OPENSEARCH_URL" "RERANK_MODEL_DIR" "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")) }}
+            {{- fail (printf "Unsupported non-secret environment entry %s. Use the runtime Secret." $key) }}
+            {{- end }}
+            - {name: {{ $key }}, value: {{ $value | quote }}}
+            {{- end }}
+          resources: {{ toYaml (index $root.Values.resources $component) | nindent 12 }}
+          volumeMounts:
+            - {name: data, mountPath: /data}
+      volumes:
+        - name: data
+          {{- if eq $root.Values.objectStorage "s3" }}
+          emptyDir: {}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ required "existingClaim must reference a shared PVC" $root.Values.existingClaim | quote }}
+          {{- end }}
+{{- if $root.Values.multiNode }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ printf "%s-%s" $root.Release.Name $component | quote }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: procurepilot
+      app.kubernetes.io/instance: {{ $root.Release.Name | quote }}
+      app.kubernetes.io/component: {{ $component | quote }}
+{{- end }}
+{{- end }}

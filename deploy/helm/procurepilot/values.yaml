@@ -1,0 +1,23 @@
+image:
+  repository: procurepilot/app
+  tag: "1.0.0-rc.2-local"
+  pullPolicy: IfNotPresent
+
+# 已有Secret需提供DATABASE_URL和API_TOKENS_JSON，模型与各数据服务凭据也可从此传入。
+existingSecret: procurepilot-runtime
+# 提供可由UID/GID 10001写入的PVC。跨节点部署需使用ReadWriteMany。
+existingClaim: procurepilot-data
+objectStorage: sharedVolume
+apiReplicas: 1
+workerReplicas: 1
+multiNode: false
+environment:
+  KNOWLEDGE_BACKEND: fixture
+  SEARCH_BACKEND: local
+resources:
+  api:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {memory: 1Gi}
+  worker:
+    requests: {cpu: 200m, memory: 256Mi}
+    limits: {memory: 2Gi}

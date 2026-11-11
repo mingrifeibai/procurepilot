@@ -1,0 +1,82 @@
+[
+  {
+    "id": "single-computer",
+    "requirement": {"title": "合成研发电脑采购", "budget": "8000", "delivery_days": 14, "needs": [{"category": "computer", "quantity": 1, "min_memory_gb": 32, "interface": "usb-c"}]},
+    "expected_plan_cents": 580000
+  },
+  {
+    "id": "workstation-and-dock",
+    "requirement": {"title": "合成设计工作站与扩展坞采购", "budget": "12000", "delivery_days": 14, "needs": [{"category": "computer", "quantity": 1, "min_memory_gb": 64, "interface": "usb-c"}, {"category": "dock", "quantity": 1, "interface": "usb-c"}]},
+    "expected_plan_cents": 1005000
+  },
+  {
+    "id": "independent-compatibility-and-delivery",
+    "requirement": {
+      "title": "模拟采购验收。请分别调用 check_compatibility 复查 dev-32 + screen-27、dev-32 + dock-c，两组都要引用该工具实际返回的图谱证据。报价库存和交期按模拟快照判断，金额交给求解器。",
+      "budget": "17000",
+      "delivery_days": 9,
+      "needs": [
+        {"category": "computer", "quantity": 2, "min_memory_gb": 32, "interface": "usb-c"},
+        {"category": "monitor", "quantity": 2, "interface": "usb-c"},
+        {"category": "dock", "quantity": 2, "interface": "usb-c"}
+      ]
+    },
+    "gold_graph_pairs": [
+      {"products": ["dev-32", "screen-27"], "state": "verified", "source": "fixture://compatibility/dev-32/screen-27"},
+      {"products": ["dev-32", "dock-c"], "state": "verified", "source": "fixture://compatibility/dev-32/dock-c"}
+    ]
+  },
+  {
+    "id": "catalog-and-stock-verification",
+    "requirement": {
+      "title": "合成验收：请用目录检索工具复核 dev-32。分别核对目录参数与报价库存交期，金额交给求解器",
+      "budget": "15000",
+      "delivery_days": 10,
+      "needs": [
+        {"category": "computer", "quantity": 2, "min_memory_gb": 32, "interface": "usb-c"}
+      ]
+    },
+    "gold_catalog_id": "catalog:dev-32"
+  },
+  {
+    "id": "independent-catalog-and-quote-review",
+    "requirement": {
+      "title": "合成分工验收：寻源员独立核对 dev-32 与 design-64 的目录内存及接口，报价分析员独立核对各供应商库存和交期。分别汇报并由核验员对照证据，组合金额交求解器",
+      "budget": "150000",
+      "delivery_days": 9,
+      "needs": [
+        {"category": "computer", "quantity": 8, "min_memory_gb": 32, "interface": "usb-c", "purpose": "研发岗位，核验 dev-32"},
+        {"category": "computer", "quantity": 4, "min_memory_gb": 64, "interface": "usb-c", "purpose": "设计岗位，核验 design-64"}
+      ]
+    },
+    "quotes": [
+      {"product_id": "dev-32", "supplier": "合成供应商 · 延期", "unit_price": "5100", "stock": 20, "delivery_days": 20, "source": "fixture://eval/late-dev-32"},
+      {"product_id": "design-64", "supplier": "合成供应商 · 库存不足", "unit_price": "9000", "stock": 1, "delivery_days": 6, "source": "fixture://eval/limited-design-64"}
+    ],
+    "gold_catalog_ids": ["catalog:dev-32", "catalog:design-64"],
+    "gold_parallel_roles": ["寻源员", "报价分析员"]
+  },
+  {
+    "id": "release-simulated-split",
+    "requirement": {
+      "title": "合成采购验收，范围仅限现有模拟目录、报价、库存、交期和求解器方案。寻源员用MCP核对dev-32与design-64参数，报价员核对库存及交期，核验员判断模拟数据内的约束是否满足。",
+      "budget": "150000",
+      "delivery_days": 9,
+      "needs": [
+        {"category": "computer", "quantity": 8, "min_memory_gb": 32, "interface": "usb-c", "purpose": "研发岗位，核验 dev-32"},
+        {"category": "computer", "quantity": 4, "min_memory_gb": 64, "interface": "usb-c", "purpose": "设计岗位，核验 design-64"}
+      ]
+    },
+    "quotes": [
+      {"product_id": "dev-32", "supplier": "合成供应商 · 延期", "unit_price": "5100", "stock": 20, "delivery_days": 20, "source": "fixture://eval/late-dev-32"},
+      {"product_id": "design-64", "supplier": "合成供应商 · 库存不足", "unit_price": "9000", "stock": 1, "delivery_days": 6, "source": "fixture://eval/limited-design-64"}
+    ],
+    "expected_prepared_plan_cents": 8420000,
+    "gold_catalog_ids": ["catalog:dev-32", "catalog:design-64"],
+    "gold_parallel_roles": ["寻源员", "报价分析员"],
+    "gold_quantity_checks": [
+      {"need_index": 0, "required_quantity": 8, "allocated_quantity": 8},
+      {"need_index": 1, "required_quantity": 4, "allocated_quantity": 4}
+    ]
+  }
+]

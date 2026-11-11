@@ -1,0 +1,18 @@
+# 可选目录图谱。先启动该文件，再设置应用的KNOWLEDGE_BACKEND等环境变量。
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    ports: ["127.0.0.1:57474:7474"]
+    environment:
+      NEO4J_AUTH: neo4j/local-demo-graph-only
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    volumes: ["graph-data:/data"]
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "local-demo-graph-only", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+volumes:
+  graph-data:

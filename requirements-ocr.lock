@@ -1,0 +1,6 @@
+# 本机CPU兼容OCR引擎；使用固定的可复现模型包。
+rapidocr-onnxruntime==1.4.4
+pypdfium2==5.14.0
+opencv-python==5.0.0.93
+pyclipper==1.4.0
+shapely==2.1.2

@@ -1,0 +1,13 @@
+[
+  {"id":"team20","budget":"180000","quantity":20,"bundle":true,"expected":"feasible"},
+  {"id":"over_budget","budget":"160000","quantity":20,"bundle":true,"expected":"infeasible"},
+  {"id":"zero_stock","stock":0,"expected":"infeasible"},
+  {"id":"urgent_delivery","delivery_days":2,"expected":"infeasible"},
+  {"id":"expired_quotes","expired":true,"expected":"infeasible"},
+  {"id":"unknown_interface","interface":"thunderbolt-unknown","expected":"infeasible"},
+  {"id":"design_role","min_memory_gb":64,"quantity":10,"budget":"100000","expected":"feasible"},
+  {"id":"unknown_compatibility","bundle":true,"relations":false,"expected":"infeasible"},
+  {"id":"split_required","bundle":true,"supplier_per_category":true,"allow_split":false,"expected":"infeasible"},
+  {"id":"split_allowed","bundle":true,"supplier_per_category":true,"allow_split":true,"expected":"feasible"},
+  {"id":"duplicate_demand_stock","quantity":60,"duplicate":true,"budget":"1000000","only_dev":true,"expected":"infeasible"}
+]

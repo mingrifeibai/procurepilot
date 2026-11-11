@@ -1,0 +1,51 @@
+name: verify
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7.4-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 15
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: procurepilot
+          POSTGRES_USER: pilot
+          POSTGRES_PASSWORD: local-demo-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pilot -d procurepilot"
+          --health-interval 5s --health-timeout 3s --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: pip install -r requirements.lock -r requirements-observability.lock && pip install --no-build-isolation -e '.[test]'
+      - run: pytest -q
+        env:
+          REDIS_TEST_URL: redis://127.0.0.1:6379/0
+      - run: pytest -q
+        env:
+          TEST_DATABASE_URL: postgresql+psycopg://pilot:local-demo-only@127.0.0.1:5432/procurepilot
+          REDIS_TEST_URL: redis://127.0.0.1:6379/0
+      - run: python -m procurepilot.evaluate --output evals/results/ci.json
+      - run: python -m procurepilot.evaluate_retrieval --output evals/results/retrieval-ci.json
+      - run: python -m procurepilot.evaluate_replanning
+      - run: python -m procurepilot.evaluate_document_evidence --output evals/results/document-evidence-ci.json
+      - run: npm ci && npm test && npm run build
+        working-directory: frontend
+      - run: docker build -t procurepilot-ci .
+      - run: docker run -d --name procurepilot-ci --rm -p 127.0.0.1:18096:8091 -e MODEL_WORKER_MODE=disabled procurepilot-ci
+      - run: python scripts/container_smoke.py
+      - if: always()
+        run: docker logs procurepilot-ci || true
+      - if: always()
+        run: docker stop procurepilot-ci || true

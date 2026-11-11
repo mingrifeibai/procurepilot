@@ -1,0 +1,3 @@
+# 使用带 S3 SDK 的镜像，运行时 Secret 需包含 PostgreSQL 和 S3 配置。
+# 原件已迁移或使用全新数据库时，Pod 可各自使用临时目录。
+objectStorage: s3

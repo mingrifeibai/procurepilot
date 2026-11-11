@@ -1,0 +1,4 @@
+# 安装在基础 requirements.lock 之后，用于可选 S3 兼容对象后端。
+botocore==1.43.125
+jmespath==1.1.0
+python-dateutil==2.9.0.post0
